@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+	  <div class="container">
+    <h1>Login to Access Bear's OnlyFans</h1>
+	  <div class="jumbotron">
+		 <div id="errorMsg" class="rounded bg-danger text-white">
+		  
+		  </div>
+		  <div id="successMsg" class="rounded bg-success text-white">
+		  
+		  </div>
+		  <div id="pswdMsg" class="rounded bg-warning text-white">
+		  
+		  </div>	
+		  
+	
+	  <p>Upgrade your life by accessing Bear's premium hidden content. Featuring bear yelling and screaming.</p>
+			 <div class="row">
+	  <div class="dropdown py-2 px-2">
+	  <select id="dropdownbtn" class="form-control btn bg-secondary text-white">
+		  <option value="">Password Testing</option>
+		  <option value="dollarSign">Dollar Sign Present</option>
+		  <option value="asterisks">Asterisks Sign Present</option>
+		  <option  value="tooShort">Too Short</option>
+		  <option value="goodPswd">Password is good</option>
+		  </select>
+		  </div>
+
+		  <div class="dropdown py-2 px-2">
+	 		<select id="emailCases" class="form-control btn bg-secondary text-white">
+			  <option value="">Email Testing</option>
+			  <option value="dotBeforeAt">. before @</option>
+			  <option value="eTooShort">Too short</option>
+			  <option value="goodeMail">Email is good</option>
+			  
+			  
+			  </select>
+			 		 </div>
+		  </div> 
+		  </div>
+		 </div>
+			
+			
+
+
+
+
+		  <div class="row px-5">
+		  <div class="input-group">
+		<div class="input-group-prepend">
+	  <span for="emailBox" class="px-2 py-2 border-dark bg-secondary text-white">Email</span>
+		</div>
+
+	  <input id="emailBox" type="email" class="col-8" placeholder="enter oyur email">
+		</div>
+		  </div>
+		     <div class="row">
+			<div class="input-group py-2 px-5">
+		<div class="input-group-prepend">
+	  <span for="passwordBox" class="px-2 py-2 border-dark bg-secondary text-white">Password</span>
+		</div>
+
+	  <input id="passwordBox" type="password" class="col-8" placeholder="password">
+		</div>
+		  </div>
+		  <div class="row px-5">
+				<div class="input-group py-2">
+		<div class="input-group-prepend">
+		<div id="mathQuestion">
+	  <span for="humanVe" class="px-2 py-2 border-dark bg-secondary text-white">What is?</span>
+		</div>
+		</div>
+
+	  <input id="humanVe" type="number" class="col-8" placeholder="answer">
+		</div>
+		  </div>
+		  <div class="row px-5">
+	  <button type="submit" href="#" style="button" class=" btn-lg btn-primary text-white mx-10" id="submitButton">Submit</button>
+		  </div>
+	  
+	      
+		  <script>
+	  var num1 = -1
+	  var num2 =-1
+	  var botAnswer = -1
+	  var humAns = -1
+	  var bHasError = false
+	  let getId = (id) => {return document.getElementById(id);}
+	  const passwordBox = getId("passwordBox");
+	  const passwordTests = getId("dropdownbtn");
+	  const mathBox = getId("humanVe");
+	  const emailBox = getId("emailBox");
+	  const emailTests = getId("emailCases");
+	  function loginClicked(e) {
+		  humAns = getId("humanVe").value
+		  if (humAns == botAnswer) {
+			  if(isValidPword(getId("passwordBox").value) == false && isValidEmail(emailBox.value) == false){
+				  	getId("errorMsg").innerHTML = ""
+			        getId("successMsg").innerHTML = "<p>Success!</p>"
+				    getId("pswdMsg").innerHTML = ""
+				  	
+			  } else {
+				  getId("pswdMsg").innerHTML = "<p>Please make sure the password you entered has atleast 5 characters and no asterisks or dollar signs, or check to make sure you entered a valid email.</p>"
+				  var pswdMsg = getId("pswdMsg");
+				  for (let i=0; i<=2; i++){
+				  $(pswdMsg).fadeOut(800);
+				  $(pswdMsg).fadeIn(800);
+				  }
+				  getId("successMsg").innerHTML = ""
+				  getId("errorMsg").innerHTML = ""
+				  getId("passwordBox").select()
+				  generateBotQ();
+			  }
+		  } 
+	  }
+	  			  
+      let generateBotQ = () => {
+		  num1 = Math.floor(Math.random()* 22-2 + 2)
+		  num2 = Math.floor(Math.random()*22-2 + 2)
+		  getId("mathQuestion").innerHTML = "<span for='humanVe' class='px-2 py-2 border-dark bg-secondary text-white'>What is " + num1 + " + " + num2 + "?</span>"
+		  botAnswer = num1+num2
+	  }
+	  
+	  let isValidPword = (str) => {
+		  if(str.length <5 || str.indexOf("*") > -1 || str.indexOf("$") > -1){
+			  bHasError = true;
+			  return bHasError;
+		  } else {
+			  bHasError = false;
+			  return bHasError;
+		  }
+	  }
+	  
+	
+	  
+	  
+	  
+	  
+	  passwordTests.addEventListener('change', function(evt){
+		  let selected = passwordTests.value;
+		  console.log(selected);
+		  const CASE_PWORD_TOO_SHORT = "tooShort";
+		  const CASE_PWORD_HAS_DOLLARSIGN = "dollarSign";
+		  const CASE_PWORD_HAS_ASTERISK = "asterisks";
+		  const CASE_PWORD_GOOD = "goodPswd";
+		   
+		  if (selected == CASE_PWORD_TOO_SHORT){
+			  passwordBox.value = "hello"
+		  } else if (selected== CASE_PWORD_HAS_DOLLARSIGN){
+			  passwordBox.value = "$ilkiousmane"
+		  } else if (selected==CASE_PWORD_HAS_ASTERISK){
+			  passwordBox.value = "my*cat*is*great*"
+		  } else if (selected==CASE_PWORD_GOOD){
+			  passwordBox.value = "ThisisAGoodPassword"
+		  }
+		  
+		  mathBox.value = botAnswer
+		  emailBox.value = "testing@test.com"
+		  loginClicked();
+		 
+		  
+		  
+	  })
+	 emailTests.addEventListener('change', function(e){
+		 let selected = emailTests.value;
+		 console.log(selected)
+		 const CASE_EMAIL_DOT_BEFORE_AT = "dotBeforeAt"
+		 const CASE_EMAIL_TOO_SHORT = "eTooShort"
+		 const CASE_EMAIL_IS_GOOD = "goodeMail"
+		 
+		 if (selected==CASE_EMAIL_DOT_BEFORE_AT){
+			 emailBox.value = "silk.silk@com"
+		 } else if (selected==CASE_EMAIL_TOO_SHORT){
+			 emailBox.value = "silk"
+		 } else if (selected==CASE_EMAIL_IS_GOOD){
+			 emailBox.value = "tesitng@test.com"
+		 }
+		 mathBox.value = botAnswer
+		 passwordBox.value = "SecurePswd"
+		 loginClicked();
+	 
+	 
+		 
+		 
+		 
+	 })		  
+			  
+			  
+		function isValidEmail(str){
+			if (emailBox.value.length < 5 || str.indexOf("@") <= -1  || str.indexOf(".") <= -1 || str.indexOf(".") < str.indexOf("@")){
+				bHasError = true;
+				
+				
+			}else if (str.indexOf("@") < str.indexOf(".")) {
+				bHasError = false
+			}
+			return bHasError
+		}	  
+			  
+			  
+			  
+			  
+			  
+			  
+	  document.addEventListener('load', generateBotQ())
+	  getId("submitButton").addEventListener('click', loginClicked);
+	  
+		  
+
+			  
+
+	  
+	     </script>
+
+	  
+	  
+	  
+	  
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
