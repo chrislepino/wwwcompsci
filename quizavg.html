@@ -9,25 +9,35 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <title>Hello, world!</title>
 </head>
-  <body>
+  <body class="bg-light">
 	 <div class="container">
-    <h1 class="col-12 bg-primary text-white text-center">Quiz Averager</h1>
+    <h1 class="col-12 bg-primary text-white text-center rounded"><b>Quiz Averager</b></h1>
+		 <div class="d-none" id="errorDiv"></div>
 		 <div class="input-group mx-5">
 	<span for="scoreInpt" class="  py-2 input-group-prepend input-group-text">Add a Quiz</span>
-	<input type="text" id="scoreInpt" class="form-control col-7" placeholder="Enter quiz score">
-		<button id="submitbtn" type="submit" class="btn btn-primary text-white col-2 mx-4">Add New Quiz</button>
+	<input type="text" id="scoreInpt" class="mr-4 form-control col-4" placeholder="Enter quiz score">
+		<button id="submitbtn" type="submit" class="btn btn-primary text-white col-2 mr-2">Add New Quiz</button>
+		<button class="btn btn-danger col-2 mr-2" id="clearBtn">CLEAR</button>
+		<button class="btn btn-danger col-2"id="dropBtn">DROP LOWEST</button>
 	</div>
 <div class="d-flex flex-row py-2">
 	<div class="d-flex flex-column h-100 col-6" style="flex:50%;">
-    <h2 class="bg-success text-center text-white mx-4">Current Scores</h2>
-	<span id="scoreList" class="text-center mx-4 border border-top-0">85, 44, 100,22,33
+    <h2 class="bg-success text-center text-white mx-4 rounded"><b>Current Scores</b></h2>
+	<span id="scoreList" class="text-center mx-4 border border-top-0"><b>Scores go here</b>
 		 </span>
   
 	</div>
+			
+		
+
 	<div class="d-flex flex-column h-100 col-6" style="flex:50%;">
-  <h2 class="bg-success text-center text-white mx-4 px-8">Average</h2>
-		 <span id="avgList" class="text-center px-8 border border-top-0 mx-4">
-		 58.60</span>
+		<h2 class="bg-success text-center text-white mx-4 px-8 rounded"><b>Average</b></h2>
+		<span id="avgList" class="text-center px-8 border border-top-0 mx-4">
+			 <b>Average of score</b></span>
+
+	<div class="d-flex flex-row py-4">
+		<button class="btn btn-info" id="initBtn">Add test scores</button>
+		</div>
 </div>
 </div>
 	  </div>
@@ -40,26 +50,159 @@
 	  const submitBtn = getId("submitbtn")
 	  const scoreList = getId("scoreList")
 	  const avgList = getId("avgList")
+	  const errorMsg = getId("errorDiv")
+	  const dropBtn = getId("dropBtn")
+	  const clearBtn = getId("clearBtn")
+	  const initBtn = getId("initBtn")
 	  var allScores = []
 	  var avgScore = -1
-	  submitBtn.addEventListener('click', function(e){
-		  allScores.push(inptBox.value)
-		  scoreList.innerHTML = allScores
-		  avgList.innerHTML = findAvg(allScores)
-	  })
+	  let doDrop = false
+	  var prevVal = 999
 		 
-	 let findAvg = (scores) =>{
+	 let dropLowest = (scores) =>{
+		 for(i=0; i<scores.length; i++){
+			 if(scores[i]<prevVal){
+				 prevVal = scores[i]
+				 
+			 }}
+				return parseFloat(prevVal);
+			 	console.log(prevVal)
+		 
+	 }
+	  
+	  
+	  
+	  
+		 
+	 let findAvg = (scores, doDrop) =>{
 		 avgScore = 0
+		 if(doDrop==true){
+			 for(i=0; i<scores.length; i++){
+			 avgScore += scores[i]}
+			 
+			 avgScore -= dropLowest(scores)
+		 if (isNaN(avgScore)){
+			 return 0
+		 } else{
+		 return avgScore/(scores.length-1)
+		
+		 }}
+		 
+		 
+		 
+		 if(doDrop==false) {
 		 for(i=0; i<scores.length; i++){
 			 avgScore = avgScore+ parseInt(scores[i])}
 		 avgScore = avgScore/scores.length
+		 if (isNaN(avgScore)){
+			 return 0
+		 } else{
 		 return avgScore
+		 }}
+	 }
+	 let printScores = (scores) =>{
+		 scoreList.innerHTML = ""
+		 for(i=0; i<scores.length; i++){
+			 makeTags("div", scores[i], 1, "border", "scoreList", i)
+		 }
 	 }
 	 
+	 window.addEventListener('load', function(){
+		 clearBtn.click()
+		 
+	 })
 	 
-	  
-	  </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+	 
+	 
+
+	 
+	 dropBtn.addEventListener('click', function(){
+		 doDrop = !doDrop
+		 console.log(doDrop)
+		 avgList.innerHTML = findAvg(allScores, doDrop)
+		 if(doDrop){
+			 dropBtn.className = "btn btn-success col-2"
+		 } else if (doDrop == false){
+			 dropBtn.className = "btn btn-danger col-2"
+		 }
+	 })
+		 
+	clearBtn.addEventListener('click', function(){
+		allScores.splice(0, allScores.length)
+		printScores(allScores)
+		  avgList.innerHTML = findAvg(allScores, doDrop)
+		  inptBox.select()
+		  inptBox.value = ""
+		if (allScores.length==0){
+			clearBtn.className = "btn btn-secondary col-2 mr-2 disabled"
+		}
+
+	})
+	 
+	  let makeTags = (tag, value, amt, cssClass, location, id) => { 
+		  let tagValue =""
+		  for(let i=0; i<amt; i++){
+		   tagValue +="<" + tag + " class=" + '"' + cssClass + '"' + "id=" + '"' + id + '"' + ">" + value + "</" + tag + "> "}
+		  getId(location).innerHTML += tagValue
+		  return tagValue
+		  console.log(tagValue)
+	  }
+	   getId("scoreList").addEventListener('click', function(e) {
+		  var TARG = e.target.id
+		  console.log(TARG)
+		   allScores.splice(TARG,1);
+		   TARG.innerHTML = ""
+		   printScores(allScores)
+			  avgList.innerHTML = findAvg(allScores, doDrop)
+
+	  })
+		 
+	inptBox.addEventListener('keypress', function(e) {
+		if (e.keyCode === 13){
+		  submitBtn.click()
+		}
+
+		}
+	)
+		
+	  submitBtn.addEventListener('click', function(e){
+		  if (isNaN(inptBox.value) || inptBox.value == ""){
+			  errorMsg.className = " d-flex col-12 bg-danger text-white text-center align-middle"
+
+			  errorMsg.innerHTML = "<p>Please enter a numeric value!</p>"
+			  for(i=0; i<2; i++){
+				  $(errorMsg).fadeOut(600)
+				  $(errorMsg).fadeIn(600)	
+			  
+			  }
+			  
+			  inptBox.value = ""
+			  }else{
+		  errorMsg.className = "d-none"
+		  allScores.push(parseFloat(inptBox.value))
+		  printScores(allScores)
+		  avgList.innerHTML = findAvg(allScores, doDrop)
+		  inptBox.select()
+		  inptBox.value = ""}
+		  clearBtn.className = "btn btn-danger col-2 mr-2"
+	  })
+		 
+	
+	initBtn.addEventListener('click', function(e){
+			allScores.push(85, 44, 100, 22)
+		   printScores(allScores)
+		  avgList.innerHTML = findAvg(allScores, doDrop)
+		  inptBox.select()
+		  inptBox.value = ""
+		  clearBtn.className = "btn btn-danger col-2 mr-2"
+		
+		
+	})
+
+	</script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
