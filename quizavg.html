@@ -14,17 +14,20 @@
     <h1 class="col-12 bg-primary text-white text-center rounded"><b>Quiz Averager</b></h1>
 		 <div class="d-none" id="errorDiv"></div>
 		 <div class="input-group mx-5">
-	<span for="scoreInpt" class="  py-2 input-group-prepend input-group-text">Add a Quiz</span>
-	<input type="text" id="scoreInpt" class="mr-4 form-control col-4" placeholder="Enter quiz score">
-		<button id="submitbtn" type="submit" class="btn btn-primary text-white col-2 mr-2">Add New Quiz</button>
+			 <div class="input-group-prepend">
+				 <span for="scoreInpt" class="  py-2 input-group-text">Add a Quiz</span></div>
+	<input type="text" id="scoreInpt" class="mr-0 form-control col-4" placeholder="Enter quiz score">
+		<button id="submitbtn" type="button" class="btn btn-primary text-white col-2 mr-2 pr-0 input-group-append">Add New Quiz</button>
 		<button class="btn btn-danger col-2 mr-2" id="clearBtn">CLEAR</button>
 		<button class="btn btn-danger col-2"id="dropBtn">DROP LOWEST</button>
 	</div>
 <div class="d-flex flex-row py-2">
 	<div class="d-flex flex-column h-100 col-6" style="flex:50%;">
+	
     <h2 class="bg-success text-center text-white mx-4 rounded"><b>Current Scores</b></h2>
-	<span id="scoreList" class="text-center mx-4 border border-top-0"><b>Scores go here</b>
-		 </span>
+
+	<div id="scoreList" class="row text-center mx-4 border border-top-0"><b>Scores go here</b>
+		 </div>
   
 	</div>
 			
@@ -32,8 +35,8 @@
 
 	<div class="d-flex flex-column h-100 col-6" style="flex:50%;">
 		<h2 class="bg-success text-center text-white mx-4 px-8 rounded"><b>Average</b></h2>
-		<span id="avgList" class="text-center px-8 border border-top-0 mx-4">
-			 <b>Average of score</b></span>
+		<div id="avgList" class="  text-center px-8 border border-top-0 mx-4">
+			 <b>Average of score</b></div>
 
 	<div class="d-flex flex-row py-4">
 		<button class="btn btn-info" id="initBtn">Add test scores</button>
@@ -103,7 +106,7 @@
 	 let printScores = (scores) =>{
 		 scoreList.innerHTML = ""
 		 for(i=0; i<scores.length; i++){
-			 makeTags("div", scores[i], 1, "border", "scoreList", i)
+			 makeTags("div", scores[i], 1, "col-12 col-md-6 border", "scoreList", "quiz"+i)
 		 }
 	 }
 	 
@@ -152,7 +155,9 @@
 	   getId("scoreList").addEventListener('click', function(e) {
 		  var TARG = e.target.id
 		  console.log(TARG)
-		   allScores.splice(TARG,1);
+		   var idNum = TARG.substring(4)
+		   console.log(idNum)
+		   allScores.splice(idNum,1);
 		   TARG.innerHTML = ""
 		   printScores(allScores)
 			  avgList.innerHTML = findAvg(allScores, doDrop)
