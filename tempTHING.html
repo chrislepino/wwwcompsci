@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>shrimp tempura</title>
+  </head>
+  <body>
+    <div class="container">
+    <div class="row">
+     <div class="col-12 col-md-6 text-center inline-flex order-0 pt-1">
+        <h2 class="bg-success text-white rounded">Temperature</h2>
+    </div>
+            <div class="col-9 col-md-4 order-2 order-md-3 pb-4">
+            <input class="w-100" type="number" id="userInput" placeholder="Enter a number here">
+        </div>
+       <div class="col-3 col-md-2 py-0 order-2 order-md-3">
+    
+		   <div class="dropdown" id="dropdownStle">
+						  <select class="form-control bg-info text-white "  id="unitOptions">
+						  <option value="-1">Unit</option>
+						  <option value="0">Farenheit</option>
+						  <option value="1">Celsius</option> 
+			</select> 
+            
+	
+		   
+		   
+            </div>
+        </div>
+
+
+         <div class="col-12 col-md-6 text-center inline-flex order-3 order-md-2 pt-1">
+        <h2 class="bg-success text-white rounded">Result</h2>
+        </div>
+ 
+        <div class="col-9 col-md-4 order-4">
+            <input class="w-100" type="text" id="finalOutput" placeholder="Result goes here" readonly disabled>
+        </div>
+       <div class="col-3 col-md-2 py-0 order-4">
+        <div class="dropdown">
+          						  <select class="form-control bg-info text-white "  id="convertTo">
+						  <option value="-1">Unit</option>
+						  <option value="0" >Farenheit</option>
+						  <option value="1">Celsius</option>
+			</select>
+            
+            
+            </div>
+           </div>
+        
+        </div>
+
+	  </div>
+	  <div class="col-md-12 text-center">
+	  <button class="btn btn-danger rounded text-white" id="clearCooks">Clear cookies</button>
+		  </div>
+
+	  <div id="pastResults">
+ 		<h2 class="font-weight-bold col-12 col-md-12 py-4 text-center">Past Results</h2>
+        
+	  </div>
+	  
+	  
+
+
+            
+	  <script>
+		  
+	  const resultBox = document.getElementById("finalOutput")
+	  const userInput = document.getElementById("userInput")
+	  const initialUnit = document.getElementById("unitOptions")
+	  const finalUnit = document.getElementById("convertTo")
+	  var finalConversion
+	  const unitButton1 = document.getElementById("convertDropdown")
+	  const pastResults = document.getElementById("pastResults")
+	  const clearCookies = document.getElementById("clearCooks")
+	  var init = 0
+	  var final = 1
+	  var count = 0
+	  let inputChanges = [userInput, initialUnit, finalUnit]
+	  
+		  userInput.addEventListener('keypress', function(e){
+		  
+			  if(e.key==="Enter"){
+				  console.log("hello")
+	  if(initialUnit.value==-1 && finalUnit.value==-1){
+	  		finalConversion=0
+	  
+	  }else if(initialUnit.value==-1){
+		  finalConversion=0
+	  } else if(finalUnit==-1){
+		  finalConversion=0
+	  }
+		  else if (initialUnit.value==0 && finalUnit.value==1){
+			  finalConversion = userInput.value - 32
+			  finalConversion = finalConversion*.5556
+			  init = "F"
+			  final = "C"
+			  console.log("hi")
+		  } else if(initialUnit.value==1 && finalUnit.value==0){
+			  finalConversion = userInput.value *1.8 
+			  finalConversion += 32
+			  init = "C"
+			  final = "F"
+		  } else if(initialUnit.value==0 && finalUnit.value==0){
+			  finalConversion = userInput.value
+			  init = "F"
+			  final = "F"
+		  }else if(initialUnit.value==1 && finalUnit.value==1){
+			  finalConversion = userInput.value
+			  init = "C"
+			  final = 'C'
+		  }
+		  		  finalConversion = parseFloat(finalConversion).toFixed(2)
+			  resultBox.value = finalConversion
+			  
+
+var pastHTML ="<div class='row pt-4 text-center' > <p class='col-12  border p-2 mx-4'>" + userInput.value  + init + "=" + finalConversion + final + "</p>" + "</div>"
+				count +=1
+		  	  pastResults.innerHTML += pastHTML 
+		  	  localStorage.setItem('pastTemp'+count, pastHTML)
+
+	  }})
+	  
+	  initialUnit.addEventListener('change', function(){
+		  	   localStorage.setItem('initialUni', initialUnit.value)
+			  localStorage.setItem("finalUni", finalUnit.value)
+		  
+	  })
+		  
+		  finalUnit.addEventListener('change', function(e){
+			  	localStorage.setItem('initialUni', initialUnit.value)
+			  localStorage.setItem("finalUni", finalUnit.value)
+		  
+		  })
+		 
+		  
+	
+		  
+		  function deleteAllCookies() {
+		localStorage.clear()
+	}
+
+		  
+		  clearCookies.addEventListener('click', function(e){
+			  deleteAllCookies()
+
+		  })
+		  
+		   window.addEventListener('load', function(e){
+
+			  if(localStorage.getItem('initialUni')=="null"){
+				  initialUnit.value =1
+			  finalUnit.value = -1
+			  for(i=1; i<=localStorage.length; i++){
+				  pastResults.innerHTML += localStorage.getItem('pastTemp'+i)}}
+				else if(localStorage.getItem('initialUni')>=-1){
+					for(i=1; i<=localStorage.length-2; i++){
+					pastResults.innerHTML += localStorage.getItem('pastTemp'+i)}
+					initialUnit.value = localStorage.getItem("initialUni")
+					finalUnit.value = localStorage.getItem("finalUni")
+					
+				}
+			  }
+		  )
+
+		  
+		  
+		  
+		  
+	  </script>
+	  
+	  
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
