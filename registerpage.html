@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>Hello, world!</title>
+</head>
+  <body>
+    <div id="errorMsg" class="d-none">
+	  
+	  </div>
+	  
+	  <div id="successMsg" class="d-none"></div>
+	  
+	<form>
+		<div class="input-group">
+	<div class="col-6">
+			<div class="input-group-prepend">
+
+				<span for="username">Username</span></div>
+		<input id="username" type="text"></div>
+
+			<div class="col-6"><div class="form-check">
+			<label class="form-check-label">
+			<input type="radio" class="form-check-input" name="gender" value="male" id="m">Male
+			</label>
+			</div>
+			<div class="form-check">
+			<label class="form-check-label">
+			<input type="radio" class="form-check-input" name="gender" value="female" id="f">female
+				</label></div>
+				<div class="form-check">
+			<label class="form-check-label">
+			<input type="radio" class="form-check-input" name="gender" value="other" id="other">other
+			</label>
+					</div>
+		</div>
+			</div>
+			
+			
+			
+			<div class="col-6">
+				<div class="input-group-prepend">
+				<span for="age" class="px-2 ">Age</span></div>
+	<input id="age" type="number"> </div> 
+		<hr>
+		<div class="input-group">
+			<div class="col-6">
+			<div class="input-group-prepend">
+				<span for="password" class="px-2 col-2">Password</span></div>
+	<input id="password" type="password" class="col-10">  
+	</div>
+		</div>
+		
+		
+		
+				<div class="input-group">
+			<div class="col-6">
+			<div class="input-group-prepend">
+				<span for="email" class="px-2 col-2">Email</span></div>
+	<input id="email" type="email" class="col-10">  
+	</div>
+		</div>
+	
+	
+				<div class="input-group">
+			<div class="col-6">
+			<div class="input-group-prepend">
+				<span for="email2" class="px-2 col-4">Confirm Email</span></div>
+	<input id="email2" type="email" class="col-8">  
+	</div>
+		</div>	
+		
+		<button type="button" class="btn btn-sm btn-primary text-white py-2 my-2" id="registerBtn">Submit</button>
+	</form>
+	  <button type="button" class="btn-primary btn-sm text-white" id="fillButton">Fill</button>
+	  
+	  
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	 <script>
+		 
+		 // $(Selector).action();
+		 // $(#foo).css("color", "red")
+		 // $(".bar").addClass('bg-primary text-white')
+		 // $(".bar#second").css('background-color', 'white')
+		 /* $(document).ready(() =>{
+
+	     });
+		 
+		  $(document).on('click', '.someClass', function(){
+			 console.log("hello")
+		 }) 
+		 
+		 0 = male
+		 1 = female
+		 2 = other
+		 */
+	  let getId = (getFrm) =>{
+		  return document.getElementById(getFrm)
+	  }
+	  	  let makeTags = (tag, value, amt, cssClass, location) => { 
+		  let tagValue =""
+		  for(let i=0; i<amt; i++){
+		   tagValue +="<" + tag + " class=" + '"' + cssClass + '"' + ">" + value + "</" + tag + "> "}
+		  getId(location).innerHTML += tagValue
+		  return tagValue
+		  console.log(tagValue)
+	  }
+const fillButton = getId("fillButton")
+var bHasError = false
+var emailBox = getId("email")
+var confirmEmail = getId("email2")
+const errorDiv = getId("errorMsg")
+const successDiv = getId("successMsg")
+var selectedGender = "none"
+const userBox = getId("username")
+const passwordBox = getId("password")
+const ageBox = getId("age")
+const submit = getId("registerBtn")
+	function checkUser() {
+		if(userBox.length<5){
+			
+			bHasError = true
+			return bHasError
+			errorDiv.innerHTML += "<br><p>Make sure your username is over 5 characters.</p>"
+
+		} else{
+				console.log("user good " + bHasError)
+			 	return
+		}
+	}
+	function checkPassword(){
+		console.log("fe")
+		if (passwordBox.value.length >=5 && passwordBox.value.indexOf("$") == -1 && passwordBox.value.indexOf("*") == -1){
+			return
+			console.log("password good " + bHasError)
+		} else{
+			bHasError = true
+			errorDiv.innerHTML += "<br><p>Make sure your password is over 5 characters with no $ or * signs.</p>"
+			
+		}
+	}
+		 function checkEmail(){
+			 if(emailBox.value == confirmEmail.value && emailBox.value.length>=5){
+				 console.log("emails = and >5")
+			 	if( emailBox.value.indexOf("@") < emailBox.value.indexOf(".")){
+				 return bHasError
+			 }
+			 }else{
+				 bHasError = true
+				 
+				 errorDiv.innerHTML += "<br><p>Make sure your emails match and are valid emails.</p>"
+			 }
+				
+		 }
+	  function checkAge(){
+		  if(parseFloat(ageBox.value) >= 18){
+			  console.log("age good " + bHasError)
+		  }else{
+			  bHasError = true
+			  
+			  errorDiv.innerHTML += "<br><p>Make sure your age is 18 or over.</p>"
+		  }}
+		 var genderButtons
+		 
+		 function checkGender(){
+			  genderButtons = document.querySelector('input[name="gender"]:checked')
+			 if(genderButtons != null){
+				 console.log(genderButtons.value)
+			 } else{
+				 bHasError = true
+				 errorDiv.innerHTML += "<br><p>Make sure a gender is selected.</p>"
+			 }
+		 }
+		 submit.addEventListener('click', function(e){
+			 checkUser()
+			 checkPassword()
+			 checkAge()
+			 checkEmail()
+			 checkGender()
+			 if(bHasError==true){
+				 getId("errorMsg").className = "col-12 text-center bg-danger text-white d-show"
+				 bHasError = false
+				 successDiv.className = "d-none"
+				 $(errorDiv).fadeTo(1000,0)
+				 $(errorDiv).fadeTo(1000,1)
+
+			 } else if (bHasError==false){
+				 getId("errorMsg").className = "d-none"
+				 console.log("no err")
+				 errorDiv.innerHTML = ""
+				 successDiv.className = "col-12 bg-success text-white text-center"
+				 successDiv.innerHTML = "Success!"
+				 
+			 }
+			 
+		 })
+		 
+		 fillButton.addEventListener('click', function(e){
+			userBox.value = "testUser"
+			 passwordBox.value = "password12"
+			 ageBox.value = 19
+			 emailBox.value = "test@testing.com"
+			 confirmEmail.value = "test@testing.com"
+		 })
+	
+		 window.addEventListener('load', function(e){
+			 userBox.select()
+		 })
+		 
+	  </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
