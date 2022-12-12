@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>Hello, world!</title>
+</head>
+  <body>
+    <h1>Quiz</h1>
+	  <div class="input-group">
+	  <div class="input-group-prepend">
+	<span class="input-group-text">Name</span>	 
+	</div>
+
+		  <input type="text" class="form-control col-12" placeholder="Name" id="nameBox">
+		  	<div class="input-group-append">
+		  <button type="button" class="btn btn-primary text-white" id="nameBtn">Add Name</button>
+		  </div>
+			  </div>
+	<!--	  <div class="form-check">
+		  <label class="form-check-label"></label>
+			<input type="radio" class="form-check-input" name="" value="" id="">
+            <input type="radio" class="form-check-input" name="" value="" id="">
+			<input type="radio" class="form-check-input" name="" value="" id="">
+--><div class="input-group px-2">
+		   <div class="form-check">
+		  <label class="form-check-label" id="question">How many columns are in a row in BS4?</label>
+	
+	  <br>
+	 <div id="answerButtons">
+			<input type="radio" class="form-check-input" name="option" value="12" id="optionA">
+			 <label for="optionA" id="aLabel">12</label>
+		  <br>
+	  
+			  <input type="radio" class="form-check-input" name="option" value="8" id="optionB">
+			 <label for="optionB" id="bLabel">8</label>
+		  <br>
+
+
+			<input type="radio" class="form-check-input" name="option" value="4" id="optionC">
+			 <label for="optionC" id="cLabel">4</label>
+		 </div>
+  </div>
+		  </div>
+<button type="button" class="btn-primary text-white" id="nextButton">Next Question</button>
+	 
+	  <div id="pastScores">
+	  
+	  </div>
+	  <button id="resetData" class="d-none">Reset</button>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+	
+	 <script>
+	  let getId = (getFrm) =>{
+		  return document.getElementById(getFrm)
+	  }
+	  	  let makeTags = (tag, value, amt, cssClass, location) => { 
+		  let tagValue =""
+		  for(let i=0; i<amt; i++){
+		   tagValue +="<" + tag + " class=" + '"' + cssClass + '"' + ">" + value + "</" + tag + "> "}
+		  getId(location).innerHTML += tagValue
+		  return tagValue
+		  console.log(tagValue)
+	  }
+const pastScores = getId("pastScores")
+const nameBox = getId("nameBox")	  
+const nameButton = getId("nameBtn")
+const aLabel = getId("aLabel")
+const bLabel = getId("bLabel")
+const cLabel = getId("cLabel")
+const optionA = getId("optionA")
+const optionB = getId("optionB")
+const optionC = getId("optionC")
+const nextButton = getId("nextButton")
+const question = getId("question")
+const answerButtons = getId("answerButtons")
+const resetBtn = getId("resetData")
+var questionNumber = 0
+var numTimes = 0
+var numRight = 0
+var numWrong = 0  
+		  
+resetBtn.addEventListener('click', function(e){
+	localStorage.clear()
+})
+
+nextButton.addEventListener('click', function(e){
+	checkAnswer()
+	questionNumber+=1
+	nextQuestion()
+})
+
+nameBtn.addEventListener('click', function(e){
+	nameBox.readOnly = true
+	nameBtn.className = 'd-none'
+	
+})	 
+		 
+function loadPastScores(){
+if(localStorage.length>1){
+	makeTags("h2", "Past Scores", 1, "text-center", "pastScores")
+	resetBtn.className = "btn btn-primary text-white"
+	for(i=0; i<localStorage.length; i++)
+		//pastScores.innerHTML += "<p>" + localStorage.getItem('score'+i) + "</p>" 
+
+		makeTags("p", localStorage.getItem('score'+i), 1, "text-center border", "pastScores")
+		
+			
+}}
+		 
+function nextQuestion(){
+
+	
+	
+	if(questionNumber==1){
+		question.innerHTML = "Where in Italy is the Tower of Pisa?"
+		aLabel.innerHTML="Sicily"
+		bLabel.innerHTML = "Pisa"
+		cLabel.innerHTML = "Rome"
+} if(questionNumber==2){
+	question.innerHTML = "What is the minimum grade to pass a class in HHS?"
+	aLabel.innerHTML = "65"
+	bLabel.innerHTML = "60"
+	cLabel.innerHTML = "70"
+}
+if(questionNumber==3){
+	question.innerHTML = "How many pounds in 1 ton?"
+	aLabel.innerHTML = "1250"
+	bLabel.innerHTML = "1500"
+	cLabel.innerHTML = "2000"
+
+
+}
+if(questionNumber==4){
+	question.innerHTML = "How many US States are there?"
+	aLabel.innerHTML = "13"
+	bLabel.innerHTML = "50"
+	cLabel.innerHTML = "49"
+
+
+}
+
+if(questionNumber==5){
+	question.innerHTML = "What is the element Pb?"
+	aLabel.innerHTML = "Lead"
+	bLabel.innerHTML = "Peanutbutter"
+	cLabel.innerHTML = "Selenium"
+
+
+}
+if(questionNumber==6){
+	question.innerHTML = "What is the largest planet in the solar system?"
+	aLabel.innerHTML = "Venus"
+	bLabel.innerHTML = "Saturn"
+	cLabel.innerHTML = "Jupiter"
+	nextButton.value = "Submit Quiz"
+
+}
+if(questionNumber==7){
+		numTimes +=1
+	question.style = "display:none;"
+	answerButtons.innerHTML = numRight + " correct"
+	nextButton.style = "display:none;"
+
+	localStorage.setItem("score" + numTimes, numRight)
+	loadPastScores()
+
+}
+
+
+	
+
+
+}
+		 
+function checkAnswer(){
+	if(questionNumber==0){
+		if(optionA.checked){
+			numRight +=1
+			console.log("right")
+		} else if (questionNumber==0 && !optionA.checked){
+			numWrong +=1
+			console.log("wrong")
+		}}
+		
+	if(questionNumber==1){
+		if(optionB.checked){
+			numRight+=1
+			console.log("right")
+		} else if(questionNumber==1 && !optionB.checked){
+			numWrong +=1
+			console.log("wrong")
+		}
+	}
+	if(questionNumber==2){
+		if(optionA.checked){
+			numRight+=1
+			console.log("right")
+		} else if(questionNumber==2 && !optionA.checked){
+			numWrong +=1
+			console.log("wrong")
+		}
+	}
+		if(questionNumber==3){
+		if(optionC.checked){
+			numRight+=1
+			console.log("right")
+		} else if(questionNumber==2 && !optionC.checked){
+			numWrong +=1
+			console.log("wrong")
+		}
+	}
+if(questionNumber==4){
+		if(optionB.checked){
+			numRight+=1
+			console.log("right")
+		} else if(questionNumber==2 && !optionB.checked){
+			numWrong +=1
+			console.log("wrong")
+		}
+	}
+if(questionNumber==5){
+		if(optionA.checked){
+			numRight+=1
+			console.log("right")
+		} else if(questionNumber==2 && !optionA.checked){
+			numWrong +=1
+			console.log("wrong")
+		}
+	}
+if(questionNumber==6){
+		if(optionC.checked){
+			numRight+=1
+			console.log("right")
+		} else if(questionNumber==2 && !optionC.checked){
+			numWrong +=1
+			console.log("wrong")
+		}
+	}
+	
+	
+	
+}
+
+
+
+	  
+	  </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
