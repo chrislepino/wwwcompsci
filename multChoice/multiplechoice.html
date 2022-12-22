@@ -10,25 +10,33 @@
 <title>Hello, world!</title>
 </head>
   <body>
-    <h1>Quiz</h1>
+    <h1 class="text-center">Quiz</h1>
+	  <div class="container">
+
 	  <div class="input-group">
 	  <div class="input-group-prepend">
+		  <div id="nameInputTing" style="position:relative;">
 	<span class="input-group-text">Name</span>	 
 	</div>
 
-		  <input type="text" class="form-control col-12" placeholder="Name" id="nameBox">
+		  <input type="text" class="form-control col-4 col-md-6" placeholder="Name" id="nameBox" style="position:relative;">
 		  	<div class="input-group-append">
 		  <button type="button" class="btn btn-primary text-white" id="nameBtn">Add Name</button>
 		  </div>
 			  </div>
+		  </div>
+	  </div>
 	<!--	  <div class="form-check">
 		  <label class="form-check-label"></label>
 			<input type="radio" class="form-check-input" name="" value="" id="">
             <input type="radio" class="form-check-input" name="" value="" id="">
 			<input type="radio" class="form-check-input" name="" value="" id="">
---><div class="input-group px-2">
+
+-->
+		 
+		  <div class="input-group px-2 ">
 		   <div class="form-check">
-		  <label class="form-check-label" id="question">How many columns are in a row in BS4?</label>
+		  <label class="form-check-label " id="question">How many columns are in a row in BS4?</label>
 	
 	  <br>
 	 <div id="answerButtons">
@@ -44,14 +52,16 @@
 			<input type="radio" class="form-check-input" name="option" value="4" id="optionC">
 			 <label for="optionC" id="cLabel">4</label>
 		 </div>
-  </div>
+		 </div>
+
 		  </div>
 <button type="button" class="btn-primary text-white" id="nextButton">Next Question</button>
 	 
 	  <div id="pastScores">
 	  
 	  </div>
-	  <button id="resetData" class="d-none">Reset</button>
+	  <button id="resetData" class="d-none">Go Back</button>
+	  <button id="resetCookies" class="d-none ">Reset</button>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -69,6 +79,7 @@
 		  return tagValue
 		  console.log(tagValue)
 	  }
+const allNameThings = getId("nameInputTing")
 const pastScores = getId("pastScores")
 const nameBox = getId("nameBox")	  
 const nameButton = getId("nameBtn")
@@ -82,56 +93,120 @@ const nextButton = getId("nextButton")
 const question = getId("question")
 const answerButtons = getId("answerButtons")
 const resetBtn = getId("resetData")
+const resetCookies = getId("resetCookies")
 var questionNumber = 0
 var numTimes = 0
 var numRight = 0
-var numWrong = 0  
-		  
-resetBtn.addEventListener('click', function(e){
+var numWrong = 0 
+let questionNumbers = [1, 2,3,4,5,6,7,8,9,10]
+let lastNum = 11
+let index
+if(localStorage.getItem("numbTimes") != null && localStorage.getItem("numbTimes") != NaN){
+	localStorage.getItem("numbTimes")
+}else{
+	localStorage.setItem('numbTimes', numTimes)
+	localStorage.getItem("numbTimes")
+}
+var intNum = parseInt(localStorage.getItem("numbTimes"))
+
+window.addEventListener('load', function(e){
+nextQuestion()
+document.title = "Question 1 of 10."
+})
+
+resetCookies.addEventListener('click', function(e){
 	localStorage.clear()
+	loadPastScores()
+})
+
+resetBtn.addEventListener('click', function(e){
+	location.reload()
 })
 
 nextButton.addEventListener('click', function(e){
 	checkAnswer()
-	questionNumber+=1
+	getNumber()
+	document.title = "Question " + questionNumber + " of 10."
 	nextQuestion()
 })
 
 nameBtn.addEventListener('click', function(e){
+	if(nameBox.value.length > 0){
+	question.className="text-dark"
 	nameBox.readOnly = true
 	nameBtn.className = 'd-none'
+	halfWidth = screen.width/2
+	$("#nameInputTing").animate({left: halfWidth-200})
+	$("#nameBox").animate({left: halfWidth-200})
+	$("#nameBox").addClass("col-4 col-md-6")
+	getNumber()
+	nextQuestion()
+			nextButton.className = 'btn-primary text-white'} else{
+				question.innerHTML = "Enter a name to continue"
+				question.className="text-danger"
+			}
+	})
+		 
 	
-})	 
+	
+		 
+nameBox.addEventListener('keypress', function(e){
+	if(e.key==="Enter"){
+		nameBtn.click()
+	}
+})
 		 
 function loadPastScores(){
-if(localStorage.length>1){
+	pastScores.innerHTML = ""
+if(localStorage.length>=1){
 	makeTags("h2", "Past Scores", 1, "text-center", "pastScores")
 	resetBtn.className = "btn btn-primary text-white"
-	for(i=0; i<localStorage.length; i++)
-		//pastScores.innerHTML += "<p>" + localStorage.getItem('score'+i) + "</p>" 
+	for(i=1; i<localStorage.length; i++)
+		// pastScores.innerHTML += "<p>" + localStorage.getItem('score'+i) + "</p>" 
 
-		makeTags("p", localStorage.getItem('score'+i), 1, "text-center border", "pastScores")
+		makeTags("p", parseInt(localStorage.getItem('score'+i)), 1, "text-center border", "pastScores")
 		
 			
 }}
-		 
-function nextQuestion(){
 
+function getNumber(){
+	if(questionNumbers.length === 0){
+		questionNumber = 11
+	}else{
+	let index = Math.floor(Math.random()*questionNumbers.length)
+	questionNumber = questionNumbers[index]
+	questionNumbers.splice(index, 1)
+	console.log(questionNumbers[index])}
+	$("input[type=radio]").addClass("d-inline")
+	
+}		 
+		 
+
+function nextQuestion(){
+	if(questionNumber==0){
+		question.innerHTML = "Please enter a name to begin"
+		aLabel.innerHTML = ""
+		bLabel.innerHTML = ""
+		$("input[type=radio]").addClass("d-none")
+		resetCookies.className = "d-none"
+		cLabel.innerHTML = ""
+		nextButton.className = 'd-none'
+	}
 	
 	
 	if(questionNumber==1){
-		question.innerHTML = "Where in Italy is the Tower of Pisa?"
+		question.innerHTML = "1 Where in Italy is the Tower of Pisa?"
 		aLabel.innerHTML="Sicily"
 		bLabel.innerHTML = "Pisa"
 		cLabel.innerHTML = "Rome"
 } if(questionNumber==2){
-	question.innerHTML = "What is the minimum grade to pass a class in HHS?"
+	question.innerHTML = "2 What is the minimum grade to pass a class in HHS?"
 	aLabel.innerHTML = "65"
 	bLabel.innerHTML = "60"
 	cLabel.innerHTML = "70"
 }
 if(questionNumber==3){
-	question.innerHTML = "How many pounds in 1 ton?"
+	question.innerHTML = "3 How many pounds in 1 ton?"
 	aLabel.innerHTML = "1250"
 	bLabel.innerHTML = "1500"
 	cLabel.innerHTML = "2000"
@@ -139,7 +214,7 @@ if(questionNumber==3){
 
 }
 if(questionNumber==4){
-	question.innerHTML = "How many US States are there?"
+	question.innerHTML = "4 How many US States are there?"
 	aLabel.innerHTML = "13"
 	bLabel.innerHTML = "50"
 	cLabel.innerHTML = "49"
@@ -148,7 +223,7 @@ if(questionNumber==4){
 }
 
 if(questionNumber==5){
-	question.innerHTML = "What is the element Pb?"
+	question.innerHTML = "5 What is the element Pb?"
 	aLabel.innerHTML = "Lead"
 	bLabel.innerHTML = "Peanutbutter"
 	cLabel.innerHTML = "Selenium"
@@ -156,21 +231,47 @@ if(questionNumber==5){
 
 }
 if(questionNumber==6){
-	question.innerHTML = "What is the largest planet in the solar system?"
+	question.innerHTML = "6 What is the largest planet in the solar system?"
 	aLabel.innerHTML = "Venus"
 	bLabel.innerHTML = "Saturn"
 	cLabel.innerHTML = "Jupiter"
 	nextButton.value = "Submit Quiz"
 
+}if(questionNumber==7){
+	question.innerHTML = "7 What means opposite over hypotenuse?"
+	aLabel.innerHTML = "Sin"
+	bLabel.innerHTML = "Cos"
+	cLabel.innerHTML = "Tan"
 }
-if(questionNumber==7){
-		numTimes +=1
+if(questionNumber==8){
+	question.innerHTML = "8 How old is Joeseph Biden?"
+	aLabel.innerHTML = "90"
+	bLabel.innerHTML = "80"
+	cLabel.innerHTML = "78"
+}
+	if(questionNumber==9){
+	question.innerHTML = "9 How many countries are in the European Union?"
+	aLabel.innerHTML = "30"
+	bLabel.innerHTML = "24"
+	cLabel.innerHTML = "27"
+} if(questionNumber==10){
+	question.innerHTML = "10 How many moons does Venus have"
+	aLabel.innerHTML = "3"
+	bLabel.innerHTML = "0"
+	cLabel.innerHTML = "6"
+}
+if(questionNumber==11){
+		newNumb = intNum +1 
 	question.style = "display:none;"
+	answerButtons.className = "text-center"
 	answerButtons.innerHTML = numRight + " correct"
 	nextButton.style = "display:none;"
-
-	localStorage.setItem("score" + numTimes, numRight)
+	localStorage.setItem("numbTimes", newNumb)
+	localStorage.setItem("score"+newNumb, parseInt(numRight))
+	resetCookies.className = "btn btn-danger text-white"
 	loadPastScores()
+	document.title = numRight + " correct out of 10."
+
 
 }
 
@@ -242,6 +343,31 @@ if(questionNumber==6){
 		} else if(questionNumber==2 && !optionC.checked){
 			numWrong +=1
 			console.log("wrong")
+		}
+	} if(questionNumber==7){
+		if(optionA.checked){
+			numRight +=1
+			
+		}else if(questionNumber==2 && !optionA.checked){
+			numWrong+=1
+		}
+	} if(questionNumber==8){
+		if(optionB.checked){
+			numRight +=1
+		}else if (questionNumber==8 && !optionB.checked){
+			numWrong+=1
+		}
+	} if(questionNumber==9){
+		if(optionC.checked){
+			numRight +=1
+		} else if(questionNumber==9 && !optionC.checked){
+			numWrong +=1
+		}
+	} if(questionNumber==10){
+		if(optionB.checked){
+			numRight +=1
+		}else if (questionNumber==10 && !optionB.checked){
+			numWrong +=1
 		}
 	}
 	
